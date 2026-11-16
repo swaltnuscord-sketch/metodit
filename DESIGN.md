@@ -29,7 +29,7 @@ The palette is organized around warm mineral surfaces, carbon ink, and a restrai
 | surface-muted | #DED9CF | Quiet inset areas, table headers |
 | ink | #20211E | Primary text and dark structural surfaces |
 | ink-soft | #41433D | Secondary headings and strong supporting text |
-| muted | #77786F | Metadata, helper copy, timestamps |
+| muted | #64655D | Metadata, helper copy, timestamps |
 | line | #C9C4B9 | Hairline dividers and restrained borders |
 | line-strong | #A9A397 | Emphasized separators and input boundaries |
 | signal | #B84F35 | Primary action, key brand emphasis, selected state |
@@ -43,7 +43,7 @@ Status colors must remain distinct from the brand accent. Never use the brand si
 | Token | Hex | Meaning |
 |---|---:|---|
 | status-recovery | #55745E | Recoverable margin / positive finding |
-| status-warning | #A66A24 | Variance requiring review |
+| status-warning | #875016 | Variance requiring review |
 | status-danger | #A63F36 | Duplicate, overbill, or blocking issue |
 | status-neutral | #77786F | Informational or unclassified |
 
@@ -155,7 +155,7 @@ Use a 4px base unit. Whitespace should create hierarchy; do not fill every avail
 ## 8. Accessibility and trust
 
 - Meet WCAG AA contrast for text and interactive controls.
-- Verify contrast for the signal color in each intended foreground/background pairing; do not assume the same pairing works on both light and dark surfaces.
+- Verify contrast for the signal color in each intended foreground/background pairing; do not assume the same pairing works on both light and dark surfaces. The implementation uses the darker signal-hover token for primary button fills and a darker muted neutral for small text to preserve WCAG AA contrast on the paper canvas.
 - Pair every status color with a word, icon, or other non-color cue.
 - Preserve visible keyboard focus.
 - Respect reduced-motion preferences.
@@ -173,7 +173,7 @@ This is a future implementation reference only. Do not paste it into the current
   --color-surface-muted: #DED9CF;
   --color-ink: #20211E;
   --color-ink-soft: #41433D;
-  --color-muted: #77786F;
+  --color-muted: #64655D;
   --color-line: #C9C4B9;
   --color-line-strong: #A9A397;
   --color-signal: #B84F35;
@@ -181,7 +181,7 @@ This is a future implementation reference only. Do not paste it into the current
   --color-signal-wash: #F1E1DA;
 
   --color-status-recovery: #55745E;
-  --color-status-warning: #A66A24;
+  --color-status-warning: #875016;
   --color-status-danger: #A63F36;
   --color-status-neutral: #77786F;
 
