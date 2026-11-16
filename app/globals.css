@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;450;500;550;600;650;700;750;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700;750;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 :root {
   color-scheme: dark;
@@ -11,7 +11,7 @@
   --color-status-warning: #F59E0B;
   --color-status-danger: #EF4444;
   --font-ui: "Inter", Arial, sans-serif;
-  --font-mono: "DM Mono", "JetBrains Mono", monospace;
+  --font-mono: "JetBrains Mono", monospace;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
