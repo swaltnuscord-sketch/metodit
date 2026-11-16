@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
           apikey: serviceRoleKey,
           Authorization: `Bearer ${serviceRoleKey}`,
           "Content-Type": "application/json",
-          Prefer: "resolution=ignore-duplicates,return=minimal",
+          Prefer: "resolution=ignore-duplicates,return=representation",
         },
         body: JSON.stringify({
           email,
@@ -87,7 +87,6 @@ export async function POST(request: NextRequest) {
     );
 
     if (!response.ok) {
-      // Do not leak provider details or submitted personal data to the browser.
       console.error("Waitlist persistence failed", { status: response.status });
       return NextResponse.json(
         { ok: false, error: "We couldn’t save your details. Please try again shortly." },
@@ -95,8 +94,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const inserted = response.status !== 204 && response.headers.get("content-length") !== "0";
-    return NextResponse.json({ ok: true, alreadyJoined: !inserted });
+    const rows = (await response.json().catch(() => [])) as unknown[];
+    return NextResponse.json({ ok: true, alreadyJoined: rows.length === 0 });
   } catch {
     return NextResponse.json(
       { ok: false, error: "The waitlist is temporarily unavailable. Please try again." },
