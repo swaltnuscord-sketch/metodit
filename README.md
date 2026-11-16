@@ -2,7 +2,7 @@
 
 Metodit is freight finance and autonomous reconciliation software for mid-market US freight brokerages.
 
-This repository currently contains the Phase 1 marketing landing page and early-access waitlist foundation, aligned with the approved PRD and `DESIGN.md`.
+This repository contains the Phase 1 marketing landing page and early-access waitlist foundation, aligned with the approved PRD and Metodit design baseline.
 
 ## Local development
 
@@ -26,8 +26,7 @@ The form persists signups to Supabase through a server-side Next.js route. It do
 ```bash
 SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVICE_ROLE_KEY
-NEXT_PUBLIC_SITE_URL=https://YOUR_DOMAIN
-``
+```
 
 4. Keep `SUPABASE_SERVICE_ROLE_KEY` server-only. Never prefix it with `NEXT_PUBLIC_`.
 5. Deploy the Next.js app to Vercel (or another Node.js host).
@@ -49,7 +48,7 @@ The landing page uses the approved Metodit palette:
 | Variance Amber | `#F59E0B` |
 | Duplicate / overbill Crimson | `#EF4444` |
 
-Inter is used for interface typography. DM Mono is used as the numeric/technical monospace fallback until JetBrains Mono is loaded in the production font pipeline. All illustrative report figures are visibly marked `[MOCK / SYNTHETIC DATA]`.
+Inter is used for interface typography. JetBrains Mono is used for financial and technical data. All illustrative report figures are visibly marked `[MOCK / SYNTHETIC DATA]`.
 
 ## Product scope and accuracy
 
