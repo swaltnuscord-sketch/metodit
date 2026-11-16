@@ -1,8 +1,10 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
+import "./preview.css";
 
 type SignupState = "idle" | "submitting" | "success" | "exists" | "error";
+type PreviewFilter = "all" | "recovery" | "control";
 
 function BrandMark({ small = false }: { small?: boolean }) {
   return (
@@ -32,10 +34,10 @@ function CheckIcon() {
 }
 
 const findings = [
-  { code: "R-01", title: "Unbilled lumper", detail: "Receipt present · no shipper charge", amount: "$385.00", tone: "warning" },
-  { code: "R-02", title: "Unbilled detention", detail: "3h 42m on-site · 2h free time", amount: "$612.50", tone: "warning" },
-  { code: "R-03", title: "Carrier overbill", detail: "Invoice exceeds approved rate con", amount: "$240.00", tone: "danger" },
-  { code: "R-04", title: "Duplicate invoice", detail: "Same carrier · invoice number match", amount: "$1,120.00", tone: "danger" },
+  { code: "R-01", title: "Unbilled lumper", detail: "Receipt present · no shipper charge", amount: "$385.00", tone: "warning", category: "recovery" as const },
+  { code: "R-02", title: "Unbilled detention", detail: "3h 42m on-site · 2h free time", amount: "$612.50", tone: "warning", category: "recovery" as const },
+  { code: "R-03", title: "Carrier overbill", detail: "Invoice exceeds approved Rate Con", amount: "$240.00", tone: "danger", category: "control" as const },
+  { code: "R-04", title: "Duplicate invoice", detail: "Same carrier · invoice number match", amount: "$1,120.00", tone: "danger", category: "control" as const },
 ];
 
 const steps = [
@@ -53,6 +55,12 @@ export default function HomePage() {
   const [partnerSlug, setPartnerSlug] = useState("");
   const [status, setStatus] = useState<SignupState>("idle");
   const [message, setMessage] = useState("");
+  const [previewFilter, setPreviewFilter] = useState<PreviewFilter>("all");
+
+  const visibleFindings = useMemo(
+    () => findings.filter((finding) => previewFilter === "all" || finding.category === previewFilter),
+    [previewFilter],
+  );
 
   useEffect(() => {
     try {
@@ -72,7 +80,7 @@ export default function HomePage() {
         }
       }
     } catch {
-      // Attribution is optional; the waitlist form remains usable if storage is unavailable.
+      // Attribution is optional; the form remains usable if storage is unavailable.
     }
   }, []);
 
@@ -86,21 +94,12 @@ export default function HomePage() {
       const response = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          company,
-          role,
-          consent,
-          website,
-          partnerSlug,
-        }),
+        body: JSON.stringify({ email, company, role, consent, website, partnerSlug }),
       });
       const result = (await response.json()) as { ok?: boolean; alreadyJoined?: boolean; error?: string };
-
       if (!response.ok || !result.ok) {
         throw new Error(result.error || "We couldn’t add you right now. Please try again.");
       }
-
       if (result.alreadyJoined) {
         setStatus("exists");
         setMessage("This email is already on the early-access list. We’ll be in touch when a place is ready.");
@@ -129,8 +128,7 @@ export default function HomePage() {
 
       <header className="site-header">
         <a className="brand" href="#top" aria-label="Metodit home">
-          <BrandMark />
-          <span>metodit<span className="brand-period">.</span></span>
+          <BrandMark /><span>metodit<span className="brand-period">.</span></span>
         </a>
         <nav className="desktop-nav" aria-label="Main navigation">
           <a href="#method">How it works</a>
@@ -153,15 +151,15 @@ export default function HomePage() {
             <a className="text-link" href="#method">See how it works <span>↓</span></a>
           </div>
           <div className="hero-proof">
-            <div className="proof-item"><span className="proof-number">01</span><span>One load packet<br />at a time</span></div>
+            <div className="proof-item"><span className="proof-number">50–200</span><span>Historical loads<br />per audit</span></div>
             <div className="proof-rule" />
             <div className="proof-item"><span className="proof-number">04</span><span>Deterministic<br />exception rules</span></div>
             <div className="proof-rule" />
-            <div className="proof-item"><span className="proof-number">100%</span><span>Evidence-led<br />review</span></div>
+            <div className="proof-item"><span className="proof-number">1 page</span><span>Recovered margin<br />report</span></div>
           </div>
         </div>
 
-        <div className="hero-visual" aria-label="Illustrative Metodit reconciliation report">
+        <div className="hero-visual" aria-label="Interactive illustrative Metodit reconciliation report">
           <div className="visual-topbar">
             <div className="window-dots"><i /><i /><i /></div>
             <span>METODIT / AUDIT PREVIEW</span>
@@ -186,13 +184,28 @@ export default function HomePage() {
               <strong>$1,840<span>.00</span></strong>
               <small className="danger-copy">12 exceptions flagged</small>
             </div>
+            <div className="metric-card">
+              <span className="metric-label">DUPLICATE INVOICES BLOCKED</span>
+              <strong>$920<span>.00</span></strong>
+              <small>Illustrative preventable spend</small>
+            </div>
+            <div className="metric-card">
+              <span className="metric-label">UNBILLED ACCESSORIALS</span>
+              <strong>34</strong>
+              <small>Items identified for review</small>
+            </div>
           </div>
           <div className="findings-head">
             <span>EXCEPTION REGISTER</span>
-            <span>4 EXAMPLE FINDINGS <b>↗</b></span>
+            <span>{visibleFindings.length} OF 4 EXAMPLE FINDINGS</span>
           </div>
-          <div className="finding-list">
-            {findings.map((finding) => (
+          <div className="preview-filters" role="group" aria-label="Filter illustrative exceptions">
+            <button type="button" className={previewFilter === "all" ? "preview-filter active" : "preview-filter"} aria-pressed={previewFilter === "all"} onClick={() => setPreviewFilter("all")}>All</button>
+            <button type="button" className={previewFilter === "recovery" ? "preview-filter active" : "preview-filter"} aria-pressed={previewFilter === "recovery"} onClick={() => setPreviewFilter("recovery")}>Margin recovery</button>
+            <button type="button" className={previewFilter === "control" ? "preview-filter active" : "preview-filter"} aria-pressed={previewFilter === "control"} onClick={() => setPreviewFilter("control")}>Payment controls</button>
+          </div>
+          <div className="finding-list" aria-live="polite">
+            {visibleFindings.map((finding) => (
               <div className="finding-row" key={finding.code}>
                 <span className={`finding-code ${finding.tone}`}>{finding.code}</span>
                 <div className="finding-description">
@@ -213,12 +226,9 @@ export default function HomePage() {
 
       <section className="ticker" aria-label="Reconciliation categories">
         <div className="ticker-inner">
-          <span>UNBILLED LUMPER</span><i />
-          <span>DETENTION VARIANCE</span><i />
-          <span>CARRIER OVERBILL</span><i />
-          <span>DUPLICATE INVOICE</span><i />
-          <span>UNBILLED LUMPER</span><i />
-          <span>DETENTION VARIANCE</span>
+          <span>UNBILLED LUMPER</span><i /><span>DETENTION VARIANCE</span><i />
+          <span>CARRIER OVERBILL</span><i /><span>DUPLICATE INVOICE</span><i />
+          <span>UNBILLED LUMPER</span><i /><span>DETENTION VARIANCE</span>
         </div>
       </section>
 
