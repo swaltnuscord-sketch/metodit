@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://metodit.com"),
   title: {
     default: "Metodit — Find the margin hiding in your freight paperwork",
     template: "%s | Metodit",
@@ -25,7 +24,7 @@ export const metadata: Metadata = {
       "Reconcile the paperwork behind every load. Catch unbilled accessorials, carrier overbilling, and duplicate invoices.",
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Metodit — Freight finance, reconciled",
     description:
       "Find the margin hiding in your freight paperwork. Join the Metodit early-access list.",
