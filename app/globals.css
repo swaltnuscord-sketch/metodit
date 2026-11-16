@@ -6,7 +6,7 @@
   --color-surface-muted: #DED9CF;
   --color-ink: #20211E;
   --color-ink-soft: #41433D;
-  --color-muted: #77786F;
+  --color-muted: #64655D;
   --color-line: #C9C4B9;
   --color-line-strong: #A9A397;
   --color-signal: #B84F35;
@@ -19,9 +19,9 @@
   --color-surface: #F3F0E9;
   --color-border: #C9C4B9;
   --color-text-primary: #20211E;
-  --color-text-muted: #77786F;
+  --color-text-muted: #64655D;
   --color-accent: #B84F35;
-  --color-status-warning: #A66A24;
+  --color-status-warning: #875016;
   --color-status-danger: #A63F36;
   --font-ui: "Instrument Sans", Arial, sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
@@ -412,4 +412,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 @media (max-width: 390px) {
   .hero h1 { font-size: clamp(39px, 11vw, 42px); }
+}
+
+/* Contrast-safe actions and metadata on the light paper canvas. */
+.button-primary {
+  color: var(--color-surface-paper);
+  background: var(--color-signal-hover);
+}
+.button-primary:hover { background: #823421; }
+.topline-right, .section-kicker span, .visual-index, .metric-card small,
+.finding-description small, .visual-foot, .step-mark, .step-bottom,
+.rule-id, .price-card > small, .footer-bottom, .form-privacy {
+  color: var(--color-muted);
 }
