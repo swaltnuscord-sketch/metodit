@@ -11,7 +11,7 @@ function BrandMark({ small = false }: { small?: boolean }) {
     <span className={`brand-mark ${small ? "brand-mark-small" : ""}`} aria-hidden="true">
       <svg viewBox="0 0 36 36" fill="none">
         <path d="M4 27.5V8.5h5.3l8.7 12 8.7-12H32v19h-5.1V16l-8.9 12-8.9-12v11.5H4Z" fill="currentColor" />
-        <path d="M4 32h28" stroke="#10B981" strokeWidth="2" />
+        <path d="M4 32h28" stroke="var(--color-signal)" strokeWidth="2" />
       </svg>
     </span>
   );
