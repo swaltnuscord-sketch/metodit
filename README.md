@@ -1,34 +1,63 @@
 # Metodit
 
-Metodit is freight brokerage reconciliation software that helps finance teams identify unbilled accessorials, carrier overbilling, and duplicate invoices.
+Metodit is freight finance and autonomous reconciliation software for mid-market US freight brokerages.
 
-## Project status
-
-Phase 1 landing page and waitlist experience. The waitlist API requires Supabase credentials; without them, submissions are not stored and the UI reports that clearly.
-
-## Stack
-
-- Next.js App Router
-- React + TypeScript
-- CSS design tokens (Inter + JetBrains Mono)
-- Supabase Postgres for optional waitlist persistence
+This repository currently contains the Phase 1 marketing landing page and early-access waitlist foundation, aligned with the approved PRD and `DESIGN.md`.
 
 ## Local development
 
+Requirements: Node.js 20.9+.
+
 ```bash
 npm install
-cp .env.example .env.local
 npm run dev
 ```
 
-Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` to enable waitlist persistence. Never expose the service-role key to the browser.
+Open http://localhost:3000.
 
-Run `supabase/schema.sql` in the Supabase SQL editor to create the waitlist table.
+## Waitlist setup
 
-## Waitlist behavior
+The form persists signups to Supabase through a server-side Next.js route. It does not report success unless Supabase confirms the request.
 
-`POST /api/waitlist` validates and stores email addresses when Supabase is configured. Otherwise it returns a service-unavailable response. The client never displays a false success state.
+1. Create a Supabase project.
+2. Run [supabase/migrations/202611160001_waitlist.sql](supabase/migrations/202611160001_waitlist.sql) in the Supabase SQL editor.
+3. Add these environment variables to your local environment and deployment platform:
 
-## Brand
+```bash
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVICE_ROLE_KEY
+NEXT_PUBLIC_SITE_URL=https://YOUR_DOMAIN
+``
 
-See [DESIGN.md](./DESIGN.md) for the Metodit brand and interface tokens. All example metrics are labeled as illustrative.
+4. Keep `SUPABASE_SERVICE_ROLE_KEY` server-only. Never prefix it with `NEXT_PUBLIC_`.
+5. Deploy the Next.js app to Vercel (or another Node.js host).
+
+The database has RLS enabled and no public policies. The API route uses the service-role key on the server, validates input, normalizes email addresses, requires explicit email-update consent, includes a honeypot field, and ignores duplicate email submissions.
+
+## Brand system
+
+The landing page uses the approved Metodit palette:
+
+| Token | Value |
+|---|---|
+| Deep Obsidian | `#090B0E` |
+| Graphite | `#11151B` |
+| Steel border | `#1F2732` |
+| Primary text | `#F3F4F6` |
+| Muted text | `#9CA3AF` |
+| Signal Emerald | `#10B981` |
+| Variance Amber | `#F59E0B` |
+| Duplicate / overbill Crimson | `#EF4444` |
+
+Inter is used for interface typography. DM Mono is used as the numeric/technical monospace fallback until JetBrains Mono is loaded in the production font pipeline. All illustrative report figures are visibly marked `[MOCK / SYNTHETIC DATA]`.
+
+## Product scope and accuracy
+
+This is the landing page and waitlist only. It does not claim that document ingestion, reconciliation workers, billing, Stripe Connect, or the audit portal are live. The 14-day / 200-load audit and $2,500/month + $1.50 per reconciled exception load are presented as the commercial model specified in the approved product plan; final terms are confirmed during onboarding.
+
+## Validation
+
+```bash
+npm run typecheck
+npm run build
+```
